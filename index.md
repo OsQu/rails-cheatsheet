@@ -19,7 +19,21 @@ Things to add:
   * puts / inspect
   * debugger
 
-# Install dependencies
+## Install dependencies
+
+Ruby dependencies are usually managed through bundler.
+
+### Install dependencies
+
+    bundle install
+
+### Run command using bundler
+
+    bundle exec <command>
+
+e.g.
+
+    bundle exec sidekiq
 
 # Migrations
 
