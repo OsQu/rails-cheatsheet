@@ -34,7 +34,7 @@ which is equivalent to
 
 ### Run migrations
 
-Run migrations define in `db/migrate` folder in default environment run
+Run migrations defined in `db/migrate` folder in default environment run
 
     bin/rails db:migrate
 
