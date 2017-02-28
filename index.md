@@ -25,9 +25,13 @@ Ruby dependencies are usually managed through bundler.
 
 ### Install dependencies
 
+Install dependencies defined in Gemfile
+
     bundle install
 
-### Run command using bundler
+### Run commands using bundler
+
+If you wanted to run any command using the dependencies, run
 
     bundle exec <command>
 
@@ -35,16 +39,115 @@ e.g.
 
     bundle exec sidekiq
 
-# Migrations
+Note, most used commands for example `rails` and `guard` have [binstubs](http://bundler.io/v1.10/bundle_binstubs.html) generated in `bin/` folder. For instance, launch Rails console with:
 
-# Running rails applications
+    bin/rails console
 
-# Log files
+which is equivalent to
 
-# Rails console
+    bundle exec rails console
 
-# Debugging
+## Migrations
 
+### Run migrations
+
+Run migrations define in `db/migrate` folder in default environment run
+
+    bin/rails db:migrate
+
+Give environment in `RAILS_ENV` environment variable
+
+    RAILS_ENV=test bin/rails db:migrate
+
+### Create migrations
+
+Migrations can be generated with [Rails migration generator](http://edgeguides.rubyonrails.org/active_record_migrations.html)
+
+    bin/rails generate migration AddNameToUser
+
+It generates a migration file to `db/migrate` that can be modified. http://edgeguides.rubyonrails.org/active_record_migrations.html contains more information about the DSL.
+
+## Running Rails applications
+
+### Foreman
+
+We run rails applications using [Foreman](https://www.theforeman.org/). The commands run are defined in `Procfile`.
+
+To run all the services
+
+    bundle exec foreman
+
+Run only one service
+
+    bundle exec foreman web
+
+## Log files
+
+Log files are located in `log/` folder. Each environment has its own file.
+
+## Rails console
+
+
+### Opening console
+
+Rails console can be accessed with
+
+    bin/rails console
+
+It contains full Rails runtime, so one can access e.g. models directly
+
+    user = User.find_by_name("OsQu")
+    user.email = 'oskari@smartly.io'
+    user.save!
+
+### Pry
+
+[Pry](https://github.com/pry/pry) is the replacement console for the default irb. Pry knows few nice tricks:
+
+#### Show documentation
+
+Show documentation for class/method use `?`
+
+    [13] rails(main)> ? String#length
+
+    From: string.c (C Method):
+    Owner: String
+    Visibility: public
+    Signature: length()
+    Number of lines: 1
+
+    Returns the character length of str.
+
+Supports at least RDOC style
+
+#### Show implementation
+
+Show implementation of class/method, use `$`
+
+    [18] rails(main)> $ ProductFeed#latest_upload
+
+    From: /Users/oskari/smartly/pena/app/models/product_feed.rb @ line 91:
+    Owner: ProductFeed
+    Visibility: public
+    Number of lines: 3
+
+    def latest_upload
+      recent_uploads.first
+    end
+
+#### Show methods
+
+Show methods of class/module, use `ls`
+
+    [19] pena(main)> ls ProductFeed::S3Output
+    constants: IoDelegator  MULTIPART_CHUNK_SIZE
+    Object.methods: JSON  yaml_tag
+    ProductFeed::S3Output#methods: after_finish  close  error  finish  start  upload  write
+
+## Debugging
+
+
+# Docker
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
