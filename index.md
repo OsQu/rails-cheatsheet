@@ -2,6 +2,36 @@
 layout: default
 ---
 
+Things to add:
+
+- Installation
+  * bundle install
+- Migrations
+  * Running
+  * Creating
+- Running rails
+  * Foreman
+  * Manually bundle exec
+- Logs
+- Rails console
+  * Pry
+- Debugging
+  * puts / inspect
+  * debugger
+
+# Install dependencies
+
+# Migrations
+
+# Running rails applications
+
+# Log files
+
+# Rails console
+
+# Debugging
+
+
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
 [Link to another page](another-page).
