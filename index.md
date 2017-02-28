@@ -2,23 +2,6 @@
 layout: default
 ---
 
-Things to add:
-
-- Installation
-  * bundle install
-- Migrations
-  * Running
-  * Creating
-- Running rails
-  * Foreman
-  * Manually bundle exec
-- Logs
-- Rails console
-  * Pry
-- Debugging
-  * puts / inspect
-  * debugger
-
 ## Install dependencies
 
 Ruby dependencies are usually managed through bundler.
