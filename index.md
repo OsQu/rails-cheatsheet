@@ -113,9 +113,19 @@ Rails console can be accessed with
 
 It contains full Rails runtime, so one can access e.g. models directly
 
-    user = User.find_by_name("OsQu")
-    user.email = 'oskari@smartly.io'
-    user.save!
+    [3] pena(main)> catalog = ProductCatalog.first
+      ProductCatalog Load (0.5ms)  SELECT  "product_catalogs".* FROM "product_catalogs" ORDER BY "product_catalogs"."id" ASC LIMIT $1  [["LIMIT", 1]]
+    => #<ProductCatalog:0x007fbd585410d8
+     ....
+     config_changed_at: nil>
+    [4] pena(main)> catalog.config = {foo: 'bar'}
+    => {:foo=>"bar"}
+    [5] pena(main)> catalog.save!
+       (0.2ms)  BEGIN
+      SQL (3.0ms)  UPDATE "product_catalogs" SET "updated_at" = $1, "config" = $2 WHERE "product_catalogs"."id" = $3  [["updated_at", 2017-02-28 20:36:22 UTC], ["config", "{\"foo\":\"bar\"}"], ["id", 1]]
+      SQL (3.7ms)  INSERT INTO "versions" ......
+       (0.3ms)  COMMIT
+    => true
 
 ### Pry
 
