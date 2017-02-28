@@ -81,12 +81,29 @@ Run only one service
 
     bundle exec foreman web
 
+## Testing
+
+Tests are written in [RSpec](http://rspec.info/).
+
+### Run whole test suite
+
+To run whole test suite
+
+    bin/rspec
+
+### Watch for changes and run only relevant files
+
+[Guard](https://github.com/guard/guard) is used to watch for file changes and run only relevant tests
+
+    bin/guard
+
+and then edit a file.
+
 ## Log files
 
 Log files are located in `log/` folder. Each environment has its own file.
 
 ## Rails console
-
 
 ### Opening console
 
@@ -146,125 +163,52 @@ Show methods of class/module, use `ls`
 
 ## Debugging
 
+### Print variable
 
-# Docker
+Variable can be printed to screen with `puts`
 
-Text can be **bold**, _italic_, or ~~strikethrough~~.
+    puts user
 
-[Link to another page](another-page).
+If the variable is not string, it will be converted using `to_s` method. To access the more detailed information, `#inspect` function can be used
 
-There should be whitespace between paragraphs.
+    puts user.inspect
 
-There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
+### Debugger
 
-# [](#header-1)Header 1
+[Byebug](https://github.com/deivid-rodriguez/byebug) is a gdb style debugger that can be used to debug Ruby. It's similar to Python's pdb.
 
-This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.
+#### Attach debugger
 
-## [](#header-2)Header 2
+Add `binding.pry` into the source to break after that line. It will break into the terminal window running the process:
 
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
+    Frame number: 0/84
 
-### [](#header-3)Header 3
+    From: /pena/app/controllers/product_catalogs_controller.rb @ line 7 ProductCatalogsController#index:
 
-```js
-// Javascript code with syntax highlighting.
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
-}
-```
+         5: def index
+         6:   binding.pry
+     =>  7:   catalogs = Facebook::ProductCatalog.list(
+         8:     facebook,
+         9:     params[:business_id],
+        10:     params.slice(:fields, :limit)
+        11:   ).sort_by(&:name)
+        12:
+        13:   render json: catalogs
+        14: end
 
-```ruby
-# Ruby code with syntax highlighting
-GitHubPages::Dependencies.gems.each do |gem, version|
-  s.add_dependency(gem, "= #{version}")
-end
-```
+Move around with `next`, `step`, `continue`. The prompt works as a Rails console, so variables can be stored and arbitrary statements run.
 
-#### [](#header-4)Header 4
+**Note!** For some reason Foreman does not render the input of the characters even though it process them. So either drive blind or run the debugged process separately from Foreman.
 
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
+## Docker
 
-##### [](#header-5)Header 5
+Docker is used through [docker-compose](https://docs.docker.com/compose/). To run a command inside docker container
 
-1.  This is an ordered list following a header.
-2.  This is an ordered list following a header.
-3.  This is an ordered list following a header.
+    docker-compose run web whoami
 
-###### [](#header-6)Header 6
+    docker-compose run test bin/guard
 
-| head1        | head two          | three |
-|:-------------|:------------------|:------|
-| ok           | good swedish fish | nice  |
-| out of stock | good and plenty   | nice  |
-| ok           | good `oreos`      | hmm   |
-| ok           | good `zoute` drop | yumm  |
+For example these two commands (in separate terminals) can be used to launch sidekiq workers using Foreman but Rails application without, so you can see debug input (see: Debugger note):
 
-### There's a horizontal rule below this.
-
-* * *
-
-### Here is an unordered list:
-
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
-
-### And an ordered list:
-
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-
-### And a nested list:
-
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-
-### Small image
-
-![](https://assets-cdn.github.com/images/icons/emoji/octocat.png)
-
-### Large image
-
-![](https://guides.github.com/activities/hello-world/branching.png)
-
-
-### Definition lists can be used with HTML syntax.
-
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
-
-```
-Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
-```
-
-```
-The final element.
-```
+    docker-compose run web bundle exec foreman start worker
+    docker-compose run --service-ports web bundle exec puma -p 11000 -C config/puma.rb
